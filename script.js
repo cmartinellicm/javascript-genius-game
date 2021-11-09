@@ -1,52 +1,49 @@
-let order = [];
+let gameOrder = [];
 let clickedOrder = [];
 let score = 0;
 
-// 0 - green
-// 1 - red
-// 2 - yellow
-// 3 - blue
-
-const blue = document.querySelector('.blue');
-const red = document.querySelector('.red');
-const green = document.querySelector('.green');
-const yellow = document.querySelector('.yellow');
+const green = document.querySelector('.green'); // 0
+const red = document.querySelector('.red'); // 1
+const yellow = document.querySelector('.yellow'); // 2
+const blue = document.querySelector('.blue'); // 3
 
 // Cria ordem aleatoria de cores
 const shuffleOrder = () => {
-    let colorOrder = Math.floor(Math.random() * 4);
-    order[order.length] = colorOrder;
+    let newColor = Math.floor(Math.random() * 4);
+    gameOrder[gameOrder.length] = newColor;
+    // gameOrder = [...gameOrder, newColor];
     clickedOrder = [];
 
-    for (let i in order) {
-        let elementColor = createColorElement(order[i]);
-        lightColor(elementColor, Number(i) + 1);
+    for (let i in gameOrder) {
+        let colorElement = selectColorElement(gameOrder[i]);
+        console.log(colorElement);
+        blinkColor(colorElement, Number(i) + 1);
     }
 };
 
 // Acende a proxima cor
-const lightColor = (element, number) => {
-    let time = number * 500;
+const blinkColor = (element, position) => {
+    let time = position * 500;
 
     setTimeout(() => {
         element.classList.add('selected');
-    }, time - 250);
+    }, time);
 
     setTimeout(() => {
         element.classList.remove('selected');
-    });
+    }, time + 300);
 };
 
 // Checa se os botoes clicados sao os mesmos da ordem gerada no jogo
 const checkOrder = () => {
     for (let i in clickedOrder) {
-        if (clickedOrder[i] != order[i]) {
+        if (clickedOrder[i] !== gameOrder[i]) {
             gameOver();
             break;
         }
     }
 
-    if (clickedOrder.length == order.length) {
+    if (clickedOrder.length == gameOrder.length) {
         alert(`Pontuação: ${score}\nVocê acertou! Iniciando próximo nível!`);
         nextLevel();
     }
@@ -55,23 +52,23 @@ const checkOrder = () => {
 // Armazena cliques do usuarios
 const click = (color) => {
     clickedOrder[clickedOrder.length] = color;
-    createColorElement(color).classList.add('selected');
+    selectColorElement(color).classList.add('selected');
 
     setTimeout(() => {
-        createColorElement(color).classList.remove('selected');
+        selectColorElement(color).classList.remove('selected');
         checkOrder();
     }, 250);
 };
 
 // Retorna a cor
-const createColorElement = (color) => {
+const selectColorElement = (color) => {
     if (color == 0) {
         return green;
     } else if (color == 1) {
         return red;
     } else if (color == 2) {
         return yellow;
-    } else if (color == 1) {
+    } else if (color == 3) {
         return blue;
     }
 };
@@ -85,7 +82,7 @@ const nextLevel = () => {
 // Game over, reinicia jogo
 const gameOver = () => {
     alert(`Pontuação: ${score}\nVocê perdeu o jogo!\nClique em ok para iniciar um novo jogo`);
-    order = [];
+    gameOrder = [];
     clickedOrder = [];
 
     playGame();
