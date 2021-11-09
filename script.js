@@ -16,7 +16,6 @@ const shuffleOrder = () => {
 
     for (let i in gameOrder) {
         let colorElement = selectColorElement(gameOrder[i]);
-        console.log(colorElement);
         blinkColor(colorElement, Number(i) + 1);
     }
 };
